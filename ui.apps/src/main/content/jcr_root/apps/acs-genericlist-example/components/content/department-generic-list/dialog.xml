@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Dialog"
+    title="Department - Generic List Item"
+    xtype="panel">
+    <items jcr:primaryType="cq:WidgetCollection">
+        <title
+            jcr:primaryType="cq:Widget"
+            fieldLabel="Title"
+            name="./jcr:title"
+            xtype="textfield"/>
+        <value
+            jcr:primaryType="cq:Widget"
+            fieldDescription="This is typically the text used internally or for URL generation"
+            fieldLabel="Value"
+            name="./value"
+            xtype="textfield"/>
+        <phone
+            jcr:primaryType="cq:Widget"
+            fieldLabel="Phone"
+            name="./phone"
+            xtype="textfield"/>
+        <email
+            jcr:primaryType="cq:Widget"
+            fieldLabel="Email Address"
+            name="./email"
+            xtype="textfield"/>
+    </items>
+    <listeners
+        jcr:primaryType="nt:unstructured"
+        afterrender="function() { ACS.CQ.GenericListItem.addTitleFields(this); }"/>
+</jcr:root>

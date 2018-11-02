@@ -1,0 +1,13 @@
+<div class="cmp-departments"
+     data-sly-use.departmentHelper="com.example.core.genericlist.DepartmentHelper"
+     data-sly-test.departments="${departmentHelper.allDepartments}"
+     data-sly-test.hasDepartments="${departments.size > 0}">
+    <div data-sly-list.department="${departments}">
+        <h1>${department.title}</h1>
+        <ul>
+            <li>${department.phone}</li>
+            <li>${department.email}</li>
+        </ul>
+    </div>
+</div>
+<h1 data-sly-test="${!hasDepartments}">Add departments to the department generic list named <pre>/etc/acs-commons/lists/departments</pre></h1>

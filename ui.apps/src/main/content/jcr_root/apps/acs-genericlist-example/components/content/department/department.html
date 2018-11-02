@@ -1,0 +1,10 @@
+<div class="cmp-department"
+     data-sly-use.departmentHelper="${'com.example.core.genericlist.DepartmentHelper' @ value=properties.department }"
+     data-sly-test.department="${departmentHelper.department}">
+    <h1>${department.title}</h1>
+    <ul>
+        <li>${department.phone}</li>
+        <li>${department.email}</li>
+    </ul>
+</div>
+<h1 data-sly-test="${!department}">Select a Department</h1>

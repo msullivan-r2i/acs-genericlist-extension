@@ -1,0 +1,11 @@
+<sly data-sly-use.department="com.example.core.genericlist.Department">
+    <li>
+        <span data-sly-test="${!department.title}" style="color: red;">Please enter a title</span>
+        <sly data-sly-test="${department.title}">
+            Title: ${department.title} <br />
+            Value: ${department.value} <br />
+            Phone: ${department.phone} <br />
+            Value: ${department.email} <br />
+        </sly>
+    </li>
+</sly>
