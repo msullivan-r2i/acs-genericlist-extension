@@ -1,14 +1,16 @@
 # Extending the AEM ACS Commons Generic List to Support Multiple Fields
 
-The Adobe Experience Manager ACS Commons Generic List facilitates authorable Title / Value pairs that can be used to populate drop downs fro a centrally authored location.  The functionality of the Generic List is limited to the Title and Value pairs, but there could be other use cases for centrally managed metadata that can be easily chosen from a dropdown.  This example will extend the Generic List to manage metadata for organizational units / departments.
+![AEM ACS Commons Generic List Extension](/readme/genericlist.png?raw=true)
+
+The Adobe Experience Manager [ACS Commons Generic List](https://adobe-consulting-services.github.io/acs-aem-commons/features/generic-lists/index.html) facilitates authorable Title / Value pairs that can be used to populate drop downs from a centrally authored location.  The functionality of the Generic List is limited to the Title and Value pairs, but there could be other use cases for centrally managed metadata that can be easily chosen from a dropdown.  This example will extend the Generic List to manage metadata for organizational units / departments.
 
 The Generic List implementation is final, so not extendable, but the underlying interface only relies on the `jcr:title`/`value` pairs to be present.  We will use this and add additional fields that we can adaptTo our own implementation.  The Generic List was built before the prevalence of Sling Models, so for this example we will try to simplify this by utilizing Sling Models.
 
 ## Implementing the List Extension
 
-*department.java*
+**[department.java](https://github.com/msullivan-r2i/acs-genericlist-extension/blob/master/core/src/main/java/com/example/core/genericlist/Department.java)**
 
-This is the Sling Model that will add `email` and `phone` values to the existing `jcr:title` and `value` fields.  It implements GenericList.Item, however this is not strictly required.  The mechanisms that populate the dropdown will not use the `Department` implementation and rely on they underlying `jcr:title` & `value` fields and utilize the ACS implementation.
+This is the Sling Model that will add `email` and `phone` values to the existing `jcr:title` and `value` fields.  It implements `GenericList.Item`, however this is not strictly required.  The mechanisms that populate the dropdown will not use the `Department` implementation and rely on they underlying `jcr:title` & `value` fields and utilize the ACS implementation.
 
 ```java
 @Model(adaptables=Resource.class)
@@ -57,7 +59,7 @@ public class Department implements GenericList.Item {
 }
 ```
 
-*deparment-generic-list.html*
+**[deparment-generic-list.html](https://github.com/msullivan-r2i/acs-genericlist-extension/blob/master/ui.apps/src/main/content/jcr_root/apps/acs-genericlist-example/components/content/department-generic-list/department-generic-list.html)**
 
 This renders the item in the Generic List authoring page.  The ACS Implementation uses JSP and not Sling Models, but this is a little simpler.
 
@@ -76,7 +78,7 @@ This renders the item in the Generic List authoring page.  The ACS Implementatio
 
 ```
 
-*dialog.xml*
+**[dialog.xml](https://github.com/msullivan-r2i/acs-genericlist-extension/blob/master/ui.apps/src/main/content/jcr_root/apps/acs-genericlist-example/components/content/department-generic-list/dialog.xml)**
 
 The Generic List is still Classic UI only, so we keep the `jcr:title` and `value` fields and add our `email` and `phone` fields.
 
@@ -115,28 +117,22 @@ The Generic List is still Classic UI only, so we keep the `jcr:title` and `value
 </jcr:root>
 ```
 
-## Optional Implementation
-
-The example also creates a new template that can be placed under `/etc/acs-commons/genericlist` and an `/etc/designs/acs-genericlist-example` design definition that allows our `department-generic-list` component to be added to that page template.  There is also a page component that simply extends the acs genericlist page component to give the design something unique to bind to.
-
-This is optional and the extended generic list item could be allowed through the standard design ui.
-
 
 ## Usage
 
 
 ### Department Helper
 
-The department helper provides two methods, one to get a specific `Department` model given a value.  The other to give a `List<Department>` of all of the models.
+The **[DepartmentHelper](https://github.com/msullivan-r2i/acs-genericlist-extension/blob/master/core/src/main/java/com/example/core/genericlist/DepartmentHelper.java)** provides two methods, one to get a specific `Department` model given a value.  The other to give a `List<Department>` of all of the models.
 
 
-A `department` and a `departments` sample component are in the example project.
+A `department` and `departments` sample components are in the example project.
 
 ### Department Component
 
 The `department` component shows how to implement the dialog field to allow an author to choose a department from a dropdown.  It then utilizes a WCMUsePojo helper to display the details of the selected department.
 
-*department/cq:dialog*
+**[department/cq:dialog](https://github.com/msullivan-r2i/acs-genericlist-extension/blob/master/ui.apps/src/main/content/jcr_root/apps/acs-genericlist-example/components/content/department/_cq_dialog/.content.xml)**
 
 We are referencing the ACS `genericlist/datasource` ui component to populate the dropdown, so this requires `jcr:title` and `value` fields be present for each item.
 
@@ -153,9 +149,9 @@ We are referencing the ACS `genericlist/datasource` ui component to populate the
 </department>
 ```
 
-*department.html*
+**[department.html](https://github.com/msullivan-r2i/acs-genericlist-extension/blob/master/ui.apps/src/main/content/jcr_root/apps/acs-genericlist-example/components/content/department/department.html)**
 
-The DepartmentHelper takes the value of the selected department from the dropdown and returns an adapted Depertment model.
+The `DepartmentHelper` takes the value of the selected department from the dropdown and returns an adapted `Department` model.
 
 ```html
 <div class="cmp-department"
@@ -174,7 +170,7 @@ The DepartmentHelper takes the value of the selected department from the dropdow
 
 The `departments` component iterates over all of the departments in the list in node order.
 
-*departments.html*
+**[departments.html](https://github.com/msullivan-r2i/acs-genericlist-extension/blob/master/ui.apps/src/main/content/jcr_root/apps/acs-genericlist-example/components/content/departments/departments.html)**
 
 ```html
 <div class="cmp-departments"
@@ -192,9 +188,16 @@ The `departments` component iterates over all of the departments in the list in 
 <h1 data-sly-test="${!hasDepartments}">Add departments to the department generic list named <pre>/etc/acs-commons/lists/departments</pre></h1>
 ```
 
+## Optional Implementation
+
+The example also creates a new template that can be placed under `/etc/acs-commons/genericlist` and an `/etc/designs/acs-genericlist-example` design definition that allows our `department-generic-list` component to be added to that page template.  There is also a page component that simply extends the acs genericlist page component to give the design something unique to bind to.
+
+This is optional and the extended generic list item could be allowed through the standard design ui.
+
+
 ## I18n
 
-This implementation doesn't conside I18n, and the ACS list seems to do this through the dictionary.  If this is a requirement, perhaps moving these out of `/etc` and into `/content/../locale` could allow for translations of this metadata as long as the values stayed the same.
+This implementation doesn't consider I18n, and the ACS list seems to do this through the dictionary.  If this is a requirement, perhaps moving these out of `/etc` and into `/content/../locale` could allow for translations of this metadata as long as the values stayed the same.
 
 
 
